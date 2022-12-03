@@ -1,0 +1,63 @@
+*{
+  box-sizing: border-box;
+}
+
+
+.scroll-max-70vh{
+  max-height: 70vh
+}
+
+.scroll-70vh{
+  height: 70vh
+}
+
+.scroll-55vh{
+  height: 55vh
+}
+
+.scroll::-webkit-scrollbar {
+  width: 5px;   
+         /* width of the entire scrollbar */
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: transparent;        /* color of the tracking area */
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: #495057;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 8px solid transparent;  /* creates padding around scroll thumb */
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* prevent default behaviour */
+
+.form-control.focus-none:focus {
+  border-color: #ced4da;
+  outline: 0;
+  /* box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%); */
+  box-shadow: none;
+}
+
+/* prevent default behaviour */
+
+
+
+.rounded-pill-right{
+  border-top-right-radius: 50rem !important;
+  border-bottom-right-radius: 50rem !important;
+}
+
+.rounded-pill-left{
+  border-top-left-radius: 50rem !important;
+  border-bottom-left-radius: 50rem !important;
+}
+
+.error_text{
+  font-size: 0.8rem;
+  font-weight: 500;
+}
