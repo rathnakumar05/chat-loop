@@ -11,13 +11,13 @@ const socketConnection = function (io) {
     });
     
     io.on("connection", async (socket) => {
-      const session = socket.request.session;
+        const session = socket.request.session;
         socket.join(session.username);      
         peers.p2p(socket, io);
       
-      socket.on("logout", () => {
-        socket.disconnect(true);
-      });
+        socket.on("logout", () => {
+          socket.disconnect(true);
+        });
     });
 }
 

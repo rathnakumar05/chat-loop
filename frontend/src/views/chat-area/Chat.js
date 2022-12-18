@@ -2,12 +2,16 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { authState } from "../../features/authSlice";
 
+
 import ScrollTo from "../../components/ScrollTo";
+import VideoChat from "./VideoChat";
+    
 import avatar from '../../images/avatar.jpg';
 
-function Chat({ chat, setChat, sendChat }) {
+function Chat({ chat, setChat, sendChat, modal_ref, showModal, hideModal, pc, local, remote }) {
     const [msg, setMsg] = useState("");
     const auth = useSelector(authState);
+
     var message = chat.message.map(function (el, index) {
         return (<div className={`d-flex mb-2 ${auth.username === el.from ? "flex-row-reverse" : ""}`} key={index}>
             <div className="card chat_msg" >
@@ -30,6 +34,7 @@ function Chat({ chat, setChat, sendChat }) {
         }
     }
     return (
+        <>
         <div className={`card scroll-max-70vh ${chat.show===false ? 'd-none' : ''}`}>
             <div className="card-header bg-transparent p-1">
                 <div className="d-flex align-items-center">
@@ -44,12 +49,15 @@ function Chat({ chat, setChat, sendChat }) {
             {message}
             </div>
             <div className="card-footer bg-transparent d-flex align-items-end">
+                    <button className="btn border-0 fs-4 p-1 me-2 ms-auto" onClick={ () => showModal(true) } ><i className="bi bi-camera-video-fill"></i></button>
                 <div className="input-group chat_area">
                     <div id="content_edit" className="form-control focus-none p-2 fs-6 me-3 chat_area_inner overflow-auto scroll" contentEditable="true" onInput={(e) => handleInput(e)}></div>
                 </div>
                 <button className="btn border-0 send_btn fs-4 p-1 me-2 ms-auto" onClick={handleSend} ><i className="bi bi-send-fill"></i></button>
             </div>
         </div>
+        <VideoChat modal_ref={modal_ref} hideModal={hideModal} local={local} remote={remote} pc={pc} />
+        </>
     );
 }
 
