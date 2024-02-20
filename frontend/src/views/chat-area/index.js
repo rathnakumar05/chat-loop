@@ -30,7 +30,7 @@ function ChartArea() {
     const local_stream = useRef(undefined);
     const remote_stream = useRef(undefined);
 
-    const URL = "http://localhost:3000";
+    const URL = "http://localhost:3000/";
     /* eslint-disable no-unused-vars */
     const [socket, setSocket] = useState(io(URL, { autoConnect: false }));
     /* eslint-disable no-unused-vars */
@@ -64,36 +64,39 @@ function ChartArea() {
 
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
+        local.current.defaultMuted = true;
+        local.current.muted = true;
         getContacts();
         listen();
         socket.connect();
     }, []);
     /* eslint-disable react-hooks/exhaustive-deps */
 
+    socket.on("connect_error", (err) => {
+        if (err.message === "unauthorized") {
+            dispatch(setSession({ session_id: "", auth: "N" }));
+            deleteSessionAuth()
+            navigate("/login");
+        }
+    });
+
+    socket.on("p2p", (data, cb) => {
+        var { from, message, to } = data;
+        var chat_msg = {
+            from,
+            message,
+            to
+        };
+        var chat = getChatState();
+        if (chat["username"] === from) {
+            var message_up = [...chat["message"], chat_msg];
+            chat_username.current = chat["username"];
+            setChat({ ...chat, message: message_up });
+            cb({ status: 'success',  seen: "Y"});
+        }
+    });
+
     function listen() {
-        socket.on("connect_error", (err) => {
-            if (err.message === "unauthorized") {
-                dispatch(setSession({ session_id: "", auth: "N" }));
-                deleteSessionAuth()
-                navigate("/login");
-            }
-        });
-    
-        socket.on("p2p", (data, cb) => {
-            var { from, message, to } = data;
-            var chat_msg = {
-                from,
-                message,
-                to
-            };
-            var chat = getChatState();
-            if (chat["username"] === from) {
-                var message_up = [...chat["message"], chat_msg];
-                chat_username.current = chat["username"];
-                setChat({ ...chat, message: message_up });
-                cb({ status: 'success',  seen: "Y"});
-            }
-        });
     
         socket.on("webrtc_request", (data, cb) => {
             handleClick({ username: data.from, show_modal: true });

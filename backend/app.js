@@ -12,6 +12,7 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var socketConnection = require('./socketio');
 
+
 var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var contactRouter = require('./routes/contact');
@@ -19,6 +20,7 @@ var messageRouter = require('./routes/message');
 
 var app = express();
 
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 var sessionMiddleware = session({
   name: 'sid',
   secret: "secret!session",
@@ -53,6 +55,11 @@ app.use("/test", indexRouter);
 app.use("/auth", authRouter);
 app.use("/contact", contactRouter);
 app.use("/message", messageRouter);
+
+//uncomment after build
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
